@@ -10,9 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping( value = "/microservice")
-
+@Api
 public class Endpoint {
 
     @Inject
