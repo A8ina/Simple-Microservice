@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.8.RELEASE</version>
+		<version>1.5.7.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -23,6 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<!--<springfox.version>2.7.0</springfox.version>-->
+		<!--<swagger-annotations-version>2.2.1</swagger-annotations-version>-->
 	</properties>
 
 	<dependencies>
@@ -45,8 +46,17 @@
 
 		<dependency>
 			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
+			<artifactId>springfox-swagger2</artifactId>
 			<version>2.7.0</version>
+            <scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>1.5.0</version>
+            <scope>compile</scope>
+			<!--<version>${swagger-annotations-version}</version>-->
 		</dependency>
 
 	</dependencies>

@@ -23,6 +23,7 @@ public class Endpoint {
     private NamesService namesService;
 
     @GetMapping
+    @ApiOperation( value = "Show all Persons details")
     public Response getAllnames() {
 
         Response response = new Response();
@@ -31,6 +32,7 @@ public class Endpoint {
     }
 
     @GetMapping(value = "/{name}")
+    @ApiOperation( value = "Show Person's details")
     public Response getName(@PathVariable("name") String name) {
 
         int index = findPersonIndex(name);
@@ -41,6 +43,7 @@ public class Endpoint {
     }
 
     @PostMapping
+    @ApiOperation( value = "Add Person")
     public Response addName(@RequestBody Request request) {
         Request addedName = namesService.addPerson(request);
 
@@ -58,6 +61,7 @@ public class Endpoint {
     }
 
     @DeleteMapping(value = "/{name}")
+    @ApiOperation( value = "Remove Person")
     public Response deleteName( @PathVariable("name") String name) {
         Response response = new Response();
         int index = findPersonIndex(name);
@@ -70,6 +74,7 @@ public class Endpoint {
     }
 
     @PatchMapping(value = "/{name}")
+    @ApiOperation( value = "Update Person's details")
     public Response updatePerson(@RequestBody Request person,
                                  @PathVariable("name") String name){
 

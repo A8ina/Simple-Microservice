@@ -1,15 +1,21 @@
 package com.athina.hexagonal.microservice.web.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.Pattern;
 
 public class Request {
 
+    @ApiModelProperty("Person's name")
     private String name;
 
+    @ApiModelProperty("Person's lastname")
     private String lastName;
 
+    @ApiModelProperty("Level of expertise ")
     private String level;
 
+    @ApiModelProperty("Monthly salary")
     @Pattern(regexp = "^[0-9]*$")
     private int salary;
 
