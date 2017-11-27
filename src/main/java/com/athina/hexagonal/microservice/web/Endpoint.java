@@ -3,6 +3,7 @@ package com.athina.hexagonal.microservice.web;
 import com.athina.hexagonal.microservice.business.NamesService;
 import com.athina.hexagonal.microservice.web.model.Request;
 import com.athina.hexagonal.microservice.web.model.Response;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping( value = "/microservice")
+@RequestMapping( value = "/microservice", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Api
 public class Endpoint {
 
@@ -89,12 +90,12 @@ public class Endpoint {
 
 
     public int findPersonIndex(String name) throws NoSuchElementException {
-        Request toDelete = namesService.getNames().stream()
+        Request personIndex = namesService.getNames().stream()
                 .filter(p -> p.getName().equals(name))
                 .findFirst()
                 .get();
 
-        int index = namesService.getNames().indexOf(toDelete);
+        int index = namesService.getNames().indexOf(personIndex);
         return index;
     }
 

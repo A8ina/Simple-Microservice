@@ -1,10 +1,2 @@
 server:
   port: 7777
-
-swagger:
-  documentation:
-    enabled:     true
-    title:       Simple Spring Microservice
-    description: RESTful endpoints for Microservice
-    version:     1.0
-    basePath:    /hexMicroservice/swagger/
