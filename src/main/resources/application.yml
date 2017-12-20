@@ -1,2 +1,16 @@
 server:
   port: 7777
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/namesDir
+    username: athina
+    password: athina123
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+      database: POSTGRESQL
+      show-sql: true
+      hibernate:
+        ddl-auto: create-drop
