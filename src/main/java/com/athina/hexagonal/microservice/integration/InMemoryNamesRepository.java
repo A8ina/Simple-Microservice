@@ -2,10 +2,12 @@
 //
 //import com.athina.hexagonal.microservice.business.NamesRepository;
 //import com.athina.hexagonal.microservice.web.model.Request;
+//import com.athina.hexagonal.microservice.web.model.Response;
 //import org.springframework.stereotype.Repository;
 //
 //import java.util.ArrayList;
 //import java.util.List;
+//import java.util.stream.Collector;
 //import java.util.stream.Collectors;
 //
 //@Repository
@@ -14,8 +16,10 @@
 //    private List<Request> names = new ArrayList<>();
 //
 //    @Override
-//    public Request getName(int index) {
-//        return names.get(index);
+//    public Request getName(String name) {
+//
+//        return names.stream().filter(item -> item.getName().equals(name)).findFirst().get();
+//        //return names.get(index);
 //    }
 //
 //    @Override

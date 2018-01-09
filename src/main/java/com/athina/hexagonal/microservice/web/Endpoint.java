@@ -36,8 +36,11 @@ public class Endpoint {
     @ApiOperation( value = "Show Person's details")
     public Response getName(@PathVariable("name") String name) {
 
-        int index = findPersonIndex(name);
-         Request request =  namesService.getNames().get(index);
+         Request request =  namesService.getNames()
+                 .stream()
+                 .filter(item -> item.getName().equals(name))
+                 .findFirst()
+                 .get();
         Response response = new Response();
         response.setData(Arrays.asList(request));
         return response;

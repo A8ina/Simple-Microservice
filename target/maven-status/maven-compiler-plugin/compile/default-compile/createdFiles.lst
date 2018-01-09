@@ -1,8 +1,8 @@
-com/athina/hexagonal/microservice/business/NamesService.class
 com/athina/hexagonal/microservice/web/model/Request.class
+com/athina/hexagonal/microservice/business/NamesService.class
 com/athina/hexagonal/microservice/web/model/Response.class
-com/athina/hexagonal/microservice/integration/InMemoryNamesRepository.class
 com/athina/hexagonal/microservice/App.class
+com/athina/hexagonal/microservice/integration/PostgresRepository.class
 com/athina/hexagonal/microservice/business/NamesRepository.class
 com/athina/hexagonal/microservice/web/SwaggerConfig.class
 com/athina/hexagonal/microservice/web/Endpoint.class
