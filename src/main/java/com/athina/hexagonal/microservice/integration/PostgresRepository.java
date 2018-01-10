@@ -36,10 +36,11 @@ public class PostgresRepository implements NamesRepository {
     private PreparedStatement pst = null;
     private Connection connection = null;
 
-    @Bean
+   // @Bean
     public Connection connection() throws ClassNotFoundException, SQLException {
 
         Class.forName(driver);
+       //DriverManager.register(new org.postgresql.Driver());
         connection =  DriverManager.getConnection(url, user, password);
         System.out.println("Database Opened");
         return  connection;
@@ -58,7 +59,13 @@ public class PostgresRepository implements NamesRepository {
 
     @Override
     public Request addElement(Request name) {
-
+        try {
+            connection();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String stm = "INSERT INTO users (name, lastname, level, salary) VALUES(?, ?, ?, ?)";
 
         try {

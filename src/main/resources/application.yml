@@ -7,7 +7,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/namesDir
     username: athina
     password: athina123
-    driverClassName: org.postgresql.Drivers
+    driverClassName: org.postgresql.Driver
 
   jpa:
       database: POSTGRESQL
