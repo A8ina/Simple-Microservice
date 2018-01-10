@@ -2,18 +2,15 @@ package com.athina.hexagonal.microservice.integration;
 
 import com.athina.hexagonal.microservice.business.NamesRepository;
 import com.athina.hexagonal.microservice.web.model.Request;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
+import springfox.documentation.spring.web.json.Json;
 
-import javax.annotation.sql.DataSourceDefinition;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -31,16 +28,21 @@ public class PostgresRepository implements NamesRepository {
     @Value("${spring.datasource.driverClassName}")
     private String driver;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private List<Request> names = new ArrayList<>();
 
     private PreparedStatement pst = null;
     private Connection connection = null;
+    private ResultSet resultSet;
+    private Statement statement;
+
 
    // @Bean
     public Connection connection() throws ClassNotFoundException, SQLException {
 
         Class.forName(driver);
-       //DriverManager.register(new org.postgresql.Driver());
         connection =  DriverManager.getConnection(url, user, password);
         System.out.println("Database Opened");
         return  connection;
@@ -49,12 +51,67 @@ public class PostgresRepository implements NamesRepository {
 
     @Override
     public Request getName(String name) {
-        return null;
+        try {
+            connection();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String stm = "select json_build_object('name',name,'lastname',lastname,'level',level,'salary',salary)"
+                    +"as data from users WHERE NAME = ? ;";
+
+        try {
+            pst = connection.prepareStatement(stm);
+            pst.setString(1, name);
+            resultSet= pst.executeQuery();
+            System.out.println("Edw0");
+
+            while (resultSet.next())
+            {
+                System.out.println("Edw");
+                System.out.println(resultSet.getRow());
+                System.out.println(resultSet.getString(2));
+                System.out.println(resultSet.getString(3));
+                System.out.println(resultSet.getInt(4));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; //objectMapper.readValues(resultSet, Request.class);
     }
 
     @Override
     public List<Request> getAll()  {
-        return null;
+        try {
+            connection();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String stm = "select json_build_object('name',name,'lastname',lastname,'level',level,'salary',salary) as data from users;";
+
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(stm);
+            while (resultSet.next())
+            {
+                System.out.println(resultSet.getString(1));
+            }
+
+            resultSet.close();
+            pst.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; //objectMapper.readValues(resultSet, Request.class);
     }
 
     @Override
@@ -66,7 +123,7 @@ public class PostgresRepository implements NamesRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String stm = "INSERT INTO users (name, lastname, level, salary) VALUES(?, ?, ?, ?)";
+        String stm = "INSERT INTO users (name, lastname, level, salary) VALUES(?, ?, ?, ?);";
 
         try {
             pst = connection.prepareStatement(stm);
@@ -75,12 +132,13 @@ public class PostgresRepository implements NamesRepository {
             pst.setString(3, name.getLevel());
             pst.setInt(4, name.getSalary());
             pst.executeUpdate();
-
+            pst.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null; //getName(name.getName());
+        return getName(name.getName());
     }
 
     @Override

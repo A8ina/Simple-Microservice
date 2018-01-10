@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface NamesRepository {
-    Request getName(String name);
+
+    Request getName( String name);
     List<Request> getAll();
     Request addElement(Request name);
     List<Request> removeElement(int index);

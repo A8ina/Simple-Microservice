@@ -15,6 +15,11 @@ public class NamesService {
         this.namesRepository = namesRepository;
     }
 
+
+    public Request getName(String name) {
+
+        return namesRepository.getName(name);
+    }
     public List<Request> getNames() {
 
         return namesRepository.getAll();
