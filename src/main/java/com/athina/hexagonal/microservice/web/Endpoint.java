@@ -45,31 +45,26 @@ public class Endpoint {
     @PostMapping
     @ApiOperation( value = "Add Person")
     public Response addName(@RequestBody Request request) {
-        Request addedName = namesService.addPerson(request);
 
+        Request addedName = namesService.addPerson(request);
         Response response = new Response();
 
+        // This is not necessary for Postgres Integration
         if(addedName==null) {
             response.setError("Person already exists");
             response.setData(getAllnames().getData());
         }
-        else {
-            response.setData(Arrays.asList(addedName));
-        }
+        else response.setData(Arrays.asList(addedName));
 
-        return response;
+      return response;
     }
 
     @DeleteMapping(value = "/{name}")
     @ApiOperation( value = "Remove Person")
     public Response deleteName( @PathVariable("name") String name) {
         Response response = new Response();
-        int index = findPersonIndex(name);
-
-        List<Request> persons = namesService.removeElement(index);
-
+        List<Request> persons = namesService.removeElement(name);
         response.setData(persons);
-
         return response;
     }
 
@@ -78,8 +73,7 @@ public class Endpoint {
     public Response updatePerson(@RequestBody Request person,
                                  @PathVariable("name") String name){
 
-        int index = findPersonIndex(name);
-        List<Request> persons = namesService.updatePerson(index,person);
+        List<Request> persons = namesService.updatePerson(name, person);
 
         Response response = new Response();
         response.setData(persons);
@@ -87,16 +81,6 @@ public class Endpoint {
         return response;
     }
 
-
-    public int findPersonIndex(String name) throws NoSuchElementException {
-        Request personIndex = namesService.getNames().stream()
-                .filter(p -> p.getName().equals(name))
-                .findFirst()
-                .get();
-
-        int index = namesService.getNames().indexOf(personIndex);
-        return index;
-    }
 
     @ExceptionHandler(value = NoSuchElementException.class)
     public Response fillError(NoSuchElementException ex) {

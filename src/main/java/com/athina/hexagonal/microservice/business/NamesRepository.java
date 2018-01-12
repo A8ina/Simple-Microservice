@@ -10,5 +10,5 @@ public interface NamesRepository {
     Request getName( String name);
     List<Request> getAll();
     Request addElement(Request name);
-    List<Request> removeElement(int index);
+    List<Request> removeElement(String name);
 }

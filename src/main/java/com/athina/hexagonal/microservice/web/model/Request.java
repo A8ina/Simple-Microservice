@@ -3,6 +3,7 @@ package com.athina.hexagonal.microservice.web.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import java.util.Objects;
 
 public class Request {
 
@@ -10,7 +11,7 @@ public class Request {
     private String name;
 
     @ApiModelProperty("Person's lastname")
-    private String lastName;
+    private String lastname;
 
     @ApiModelProperty("Level of expertise ")
     private String level;
@@ -19,12 +20,30 @@ public class Request {
     @Pattern(regexp = "^[0-9]*$")
     private int salary;
 
-    public String getLastName() {
-        return lastName;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request request = (Request) o;
+        return salary == request.salary &&
+                Objects.equals(name, request.name) &&
+                Objects.equals(lastname, request.lastname) &&
+                Objects.equals(level, request.level);
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, lastname, level, salary);
+    }
+
+    public String getLastname() {
+
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getLevel() {
@@ -51,33 +70,13 @@ public class Request {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Request request = (Request) o;
-
-        if (salary != request.salary) return false;
-        if (name != null ? !name.equals(request.name) : request.name != null) return false;
-        if (lastName != null ? !lastName.equals(request.lastName) : request.lastName != null) return false;
-        return level != null ? level.equals(request.level) : request.level == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (level != null ? level.hashCode() : 0);
-        result = 31 * result + salary;
-        return result;
-    }
 
     @Override
     public String toString() {
         return "Request{" +
                 "name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", level='" + level + '\'' +
                 ", salary=" + salary +
                 '}';

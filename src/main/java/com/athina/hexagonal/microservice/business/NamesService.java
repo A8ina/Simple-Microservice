@@ -29,15 +29,14 @@ public class NamesService {
         return namesRepository.addElement(name);
     }
 
-    public List<Request> updatePerson(int index, Request newPerson){
+    public List<Request> updatePerson(String name, Request newPerson){
 
-        namesRepository.getAll().remove(index);
+        namesRepository.getAll().remove(name);
         namesRepository.addElement(newPerson);
-
         return namesRepository.getAll();
     }
 
 
-    public List<Request> removeElement(int index){ return  namesRepository.removeElement(index);}
+    public List<Request> removeElement(String name){ return  namesRepository.removeElement(name);}
 
 }
