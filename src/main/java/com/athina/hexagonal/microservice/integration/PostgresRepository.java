@@ -4,45 +4,30 @@ import com.athina.hexagonal.microservice.business.NamesRepository;
 import com.athina.hexagonal.microservice.web.model.Request;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Primary
 public class PostgresRepository implements NamesRepository {
 
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    @Value("${spring.datasource.username}")
-    private String user;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
-    @Value("${spring.datasource.driverClassName}")
-    private String driver;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private List<Request> names = new ArrayList<>();
-
-    private PreparedStatement pst = null;
+    @Autowired
     private Connection connection = null;
+
+    private List<Request> names = new ArrayList<>();
+    private PreparedStatement pst = null;
     private ResultSet resultSet;
     private Statement statement;
 
 
-    public Connection connection() throws ClassNotFoundException, SQLException {
-
-        Class.forName(driver);
-        connection = DriverManager.getConnection(url, user, password);
-        System.out.println("Database Opened");
-        return connection;
-    }
 
     @Override
     public Request getName(String name) {
@@ -50,7 +35,6 @@ public class PostgresRepository implements NamesRepository {
         String stm = "select * from users where name = ?;";
         Request request = new Request();
         try {
-            connection();
             pst = connection.prepareStatement(stm);
             pst.setString(1, name);
             resultSet = pst.executeQuery();
@@ -64,8 +48,6 @@ public class PostgresRepository implements NamesRepository {
             resultSet.close();
             connection.close();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,17 +61,13 @@ public class PostgresRepository implements NamesRepository {
         String stm = "select * from users;";
         List<Request> requestList = new ArrayList<>();
         try {
-            connection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(stm);
             requestList = requestMapper(resultSet);
 
             statement.close();
             resultSet.close();
-            connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+         } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -102,13 +80,6 @@ public class PostgresRepository implements NamesRepository {
         Request request;
         String stm = "INSERT INTO users (name, lastname, level, salary) VALUES(?, ?, ?, ?)"
                 +"ON CONFLICT (name,lastname) DO UPDATE SET level = ?, salary =?";
-        try {
-            connection();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         try {
             pst = connection.prepareStatement(stm);
@@ -141,7 +112,6 @@ public class PostgresRepository implements NamesRepository {
     public List<Request> removeElement(String name) {
         String stm = "Delete from users where name = ?;";
         try {
-            connection();
             pst = connection.prepareStatement(stm);
             pst.setString(1, name);
             pst.executeUpdate();
@@ -149,9 +119,7 @@ public class PostgresRepository implements NamesRepository {
             pst.close();
             resultSet.close();
             connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+         } catch (SQLException e) {
             e.printStackTrace();
         }
         return  getAll();

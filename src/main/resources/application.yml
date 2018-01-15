@@ -1,8 +1,13 @@
+spring:
+  profiles:
+    active: "postgres"
+
 server:
   port: 7777
 
-
+---
 spring:
+  profiles: postgres
   datasource:
     url: jdbc:postgresql://localhost:5432/namesDir
     username: athina
